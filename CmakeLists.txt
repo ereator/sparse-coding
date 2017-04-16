@@ -1,0 +1,31 @@
+cmake_minimum_required (VERSION 3.1)
+
+project (SparseCoding)
+
+# OpenCV and DGM packages
+find_package(OpenCV 3 REQUIRED core features2d highgui imgproc imgcodecs ml PATHS "$ENV{OPENCVDIR}/build")
+find_package(DGM 1.5 REQUIRED PATHS "$ENV{DGMDIR}/build/install")
+
+# Turn on the ability to create folders to organize projects (.vcproj)
+# It creates "CMakePredefinedTargets" folder by default and adds CMake defined projects like INSTALL.vcproj and ZERO_CHECK.vcproj
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+# Sets
+set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "" FORCE)
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin) 
+
+# Properties -> C/C++ -> General -> Additional Include Directories
+include_directories(${OpenCV_INCLUDE_DIRS} ${DGM_INCLUDE_DIRS})
+
+#definitions
+add_definitions(-D_CRT_SECURE_NO_WARNINGS 
+				-D_SCL_SECURE_NO_WARNINGS
+				)
+
+add_executable(sc_train "source/sc_train.cpp")
+add_executable(sc_test  "source/sc_test.cpp")
+
+# Properties -> Linker -> Input -> Additional Dependencies
+target_link_libraries(sc_train ${OpenCV_LIBS} ${DGM_LIBRARIES})
+target_link_libraries(sc_test ${OpenCV_LIBS} ${DGM_LIBRARIES})
+
