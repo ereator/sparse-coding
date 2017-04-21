@@ -2,6 +2,7 @@
 #include "DGM.h"
 #include "FEX.h"
 #include "FEX\LinearMapper.h"
+#include "DGM\parallel.h"
 #include "VIS.h"
 
 namespace dgm = DirectGraphicalModels;
@@ -42,32 +43,32 @@ int main(int argc, char *argv[])
 		return 0;
 	}
 
-	std::string srcFolder = argv[1];
-	FILE *pFile;
+	// Parsing Parameters
+	std::string		srcFolder	= argv[1];
+	word			nWords		= 256;
+	dword			batch		= 2000;
+	unsigned int	nIt			= 100;
+	float			lRate		= 1e-2f;
+	std::string		outDicFile	= "dictionary.dic";
+	
+
+	// Reading the Data
+	Mat X;
 	vec_string_t vFiles = findFilesInDirectory(srcFolder);
 	for (auto file : vFiles) {
 		printf("%s\n", file.c_str());
-		pFile = fopen(file.c_str(), "r");
+		FILE * pFile = fopen(file.c_str(), "r");
 
-
+		// Scan all files and read the data into container X
 
 		fclose(pFile);
 	}
 	
-	
-	getchar();
-	return 0;
+	// Dictionary learning
+	dgm::fex::CSparseDictionary sparseDictionary;
+	dgm::parallel::shuffleRows(X);
+	sparseDictionary.train(X, nWords, batch, nIt, lRate);
+	sparseDictionary.save(outDicFile);
 
-
-
-
-	int res = dgm::fex::linear_mapper<int>(25, 0, 100);
-	printf("res = %d\n", res);
-	getchar();
-
-	dgm::CGraphExt *pgraph = new dgm::CGraphExt(5);
-	pgraph->build(cvSize(10, 10));
-	dgm::vis::showGraph3D(500, pgraph, [](size_t n) {return Vec3f( static_cast<float>(n / 10), static_cast<float>(n % 10), 0); });
-	dgm::fex::CSparseDictionary dict;
 	return 0;
 }

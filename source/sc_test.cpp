@@ -16,6 +16,13 @@ int main(int argc, char *argv[])
 		print_help();
 		return 0;
 	}
+
+	// Parsing Parameters
+	std::string inDicFile = "dictionary.dic";
 	
+	dgm::fex::CSparseDictionary sparseDictionary;
+	sparseDictionary.load(inDicFile);
+
+
 	return 0;
 }

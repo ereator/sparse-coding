@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.1)
 
-project (SparseCoding)
+project (sparse-coding)
 
 # OpenCV and DGM packages
 find_package(OpenCV 3 REQUIRED core features2d highgui imgproc imgcodecs ml PATHS "$ENV{OPENCVDIR}/build")
