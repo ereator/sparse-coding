@@ -20,8 +20,8 @@ int main(int argc, char *argv[])
 	// Parsing Parameters
 	std::string inDicFile = "dictionary.dic";
 	
-	dgm::fex::CSparseDictionary sparseDictionary;
-	sparseDictionary.load(inDicFile);
+	dgm::fex::CSparseCoding sparseCoding(Mat());
+//	sparseCoding.
 
 
 	return 0;
