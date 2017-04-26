@@ -45,8 +45,8 @@ int main(int argc, char *argv[])
 
 	// Parsing Parameters
 	std::string		srcFolder	= argv[1];
-	word			nSequences	= 6;
-	word 			window_size = 16;
+	const size_t	nSequences	= 6;
+	size_t 			windowSize	= 16;
 	word			step		= 1;
 	word			nWords		= 512;
 	dword			batch		= 2000;
@@ -54,40 +54,63 @@ int main(int argc, char *argv[])
 	float			lRate		= 1e-2f;
 	std::string		outDicFile	= "dictionary.dic";
 	
-	// 6-dimensional sequence in every file
-
+	const int		sampleLen	= windowSize * nSequences;
+	printf("sample len = %d\n", sampleLen);
 
 
 	// Reading the Data
-	Mat X;
 	vec_string_t vFiles = findFilesInDirectory(srcFolder);
 	
-	double el;
-	double min_el = 0;
-	double max_el = 0;
+	Mat		X;
+	Mat		sample(1, sampleLen, CV_16UC1);
+	bool	estimate_ranges = true;
+	float	min_el[nSequences];	memset(min_el, 0, nSequences * sizeof(float));
+	float	max_el[nSequences]; memset(max_el, 0, nSequences * sizeof(float));
 	for (auto file : vFiles) {
-		printf("%s\n", file.c_str());
+		printf("Processing file %s\n", file.c_str());
+
+		// Reading the content of the file to vData
 		FILE * pFile = fopen(file.c_str(), "r");
-
+		std::vector<float> vData;
 		while (!feof(pFile)) {
-			for (word s = 0; s < nSequences; s++) {		// sequences
+			double	el;
+			for (size_t s = 0; s < nSequences; s++) {			// sequences
 				fscanf(pFile, "%le", &el);
-				if (el > max_el) max_el = el;
-				if (el < min_el) min_el = el;
-				//printf("%f ", el);
-			}
-			//printf("\n");
-			//getchar();
+				vData.push_back(static_cast<float>(el));
+			} // s
 		}
-
-		// Scan all files and read the data into container X
-
 		fclose(pFile);
+
+		DGM_ASSERT(vData.size() % nSequences == 0);
+		size_t sequenceLen = vData.size() / nSequences;
+		
+		if (estimate_ranges) {	// Check min and max values
+			for (size_t s = 0; s < nSequences; s++) {		// sequences
+				size_t offset = s * sequenceLen;
+				for (size_t i = 0; i < sequenceLen; i++) {	// elements
+					float el = vData[offset + i];
+					if (el > max_el[s]) max_el[s] = el;
+					if (el < min_el[s]) min_el[s] = el;
+				} // i
+			} // s
+		} 
+		
+		for (size_t i = 0; i < sequenceLen - windowSize; i++) {		// i = start of the window
+			for (size_t s = 0; s < nSequences; s++) 				// sequences
+				for (size_t j = 0; j < windowSize; j++) {
+					float el = vData[i + s * sequenceLen + j];
+					sample.at<word>(0, s * windowSize + j) = dgm::fex::linear_mapper<word>(el, -16384, 16383);
+				}
+			X.push_back(sample);
+		} // i
 	}
-	printf("[%f; %f]\n", min_el, max_el);
+	if (estimate_ranges) {
+		printf("\nThe value ranges for %ld sequences (if estimated):\n", nSequences);
+		for (size_t s = 0; s < nSequences; s++)
+			printf("seq[%d] \\in [%.2f; %.2f]\n", s, min_el[s], max_el[s]);
+	}
 	
-	getchar();
-	return 0;
+	printf("%d samples of length %d are collected\n", X.rows, X.cols);
 
 	// Dictionary learning
 	dgm::fex::CSparseDictionary sparseDictionary;
