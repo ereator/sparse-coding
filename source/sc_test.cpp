@@ -7,7 +7,10 @@ namespace dgm = DirectGraphicalModels;
 
 void print_help(void)
 {
-	printf("Usage: \"sc_test.exe\" input_dict.dic input_file.txt output_file.txt\n");
+	printf("Usage: \"sc_test.exe\" \n");	// 0
+	printf("\t input_dict.dic \n");			// 1
+	printf("\t input_file.txt \n");			// 2
+	printf("\t output_file.txt \n");		// 3
 }
 
 int main(int argc, char *argv[])
@@ -18,10 +21,12 @@ int main(int argc, char *argv[])
 	}
 
 	// Parsing Parameters
-	std::string inDicFile = "dictionary.dic";
-	
+	std::string inDicFile	= "dictionary.dic";
+	std::string inDatFile	= "";
+	std::string outFeatures = "";
+
 	dgm::fex::CSparseCoding sparseCoding(Mat());
-//	sparseCoding.
+	sparseCoding.load(inDicFile);
 
 
 	return 0;
