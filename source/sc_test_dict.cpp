@@ -1,7 +1,7 @@
 #include "sc_test_dict.h"
 #include "FEX\LinearMapper.h"
 
-void CCSTestDict::get(Mat &sample)
+Mat CCSTestDict::getFeature(Mat &sample)
 {
 	Mat D = getDictionary();
 
@@ -18,6 +18,8 @@ void CCSTestDict::get(Mat &sample)
 	W.col(w) /= norm(D.row(w), NORM_L2);
 
 	calculate_W(sample, D, W, dgm::fex::SC_LAMBDA, dgm::fex::SC_EPSILON, 200, dgm::fex::SC_LRATE_W);
+
+	return W;
 
 //	for (word w = 0; w < nWords; w++)
 //		res[w] = dgm::fex::linear_mapper<byte>(W.at<float>(0, w), -1.0f, 1.0f);

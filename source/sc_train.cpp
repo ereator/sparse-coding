@@ -86,6 +86,7 @@ int main(int argc, char *argv[])
 			double	el;
 			fscanf(pFile, "%le", &el);
 			vData.push_back(static_cast<float>(el));
+		
 		}
 		fclose(pFile);
 

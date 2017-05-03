@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 	size_t		nSequences  = 6;
 	size_t		windowSize  = 16;
 	word		windowStep  = 1;
-	std::string outFeatures = "";
+	std::string outFeatures = "D:\\ex2_6-69.dat";
 
 	// Additional constants
 	const float	rangeMin = -16384;
@@ -44,7 +44,10 @@ int main(int argc, char *argv[])
 
 	DGM_ASSERT(vData.size() % nSequences == 0);
 	size_t sequenceLen = vData.size() / nSequences;
-
+	printf("data len = %ld\n", vData.size());
+	
+	// Calculate and save the feature
+	pFile = fopen(outFeatures.c_str(), "w");
 	for (size_t i = 0; i < sequenceLen - windowSize; i += windowStep) {		// i = start of the window
 		Mat	sample(1, sampleLen, CV_16UC1);
 		for (size_t s = 0; s < nSequences; s++) 							// sequences
@@ -52,14 +55,12 @@ int main(int argc, char *argv[])
 				float el = vData[i + s * sequenceLen + j];
 				sample.at<word>(0, s * windowSize + j) = dgm::fex::linear_mapper<word>(el, rangeMin, rangeMax);
 			}
-		sparseDictionary.get(sample);
+		Mat feature = sparseDictionary.getFeature(sample);
+		for (int x = 0; x < feature.cols; x++)
+			fprintf(pFile, "%le ", static_cast<double>(feature.at<float>(0, x)));
+		fprintf(pFile, "\n");
 	} // i
-	
-	printf("data len = %ld\n", vData.size());
-
-
-
-
+	fclose(pFile);
 
 	return 0;
 }

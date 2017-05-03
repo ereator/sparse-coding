@@ -13,6 +13,6 @@ public:
 	CCSTestDict(void) : dgm::fex::CSparseDictionary() {}
 	~CCSTestDict(void) {}
 
-	void get(Mat &sample);
+	Mat getFeature(Mat &sample);
 
 };
