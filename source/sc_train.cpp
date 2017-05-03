@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
 	vec_string_t vFiles = findFilesInDirectory(srcFolder);
 	
 	Mat			X;
-
+	Mat			sample(1, sampleLen, CV_16UC1);
 	vec_float_t	min_el(nSequences, 0.0f);	
 	vec_float_t max_el(nSequences, 0.0f); 
 	for (auto file : vFiles) {

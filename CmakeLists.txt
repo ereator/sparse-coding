@@ -25,7 +25,7 @@ add_definitions(-D_CRT_SECURE_NO_WARNINGS
 				)
 
 add_executable(sc_train "source/sc_train.cpp")
-add_executable(sc_test  "source/sc_test.cpp")
+add_executable(sc_test  "source/sc_test.cpp" "source/sc_test_dict.h" "source/sc_test_dict.cpp")
 
 # Properties -> Linker -> Input -> Additional Dependencies
 target_link_libraries(sc_train ${OpenCV_LIBS} ${DGM_LIBRARIES})

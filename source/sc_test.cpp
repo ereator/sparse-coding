@@ -1,9 +1,5 @@
-#include "DGM.h"
-#include "FEX.h"
+#include "sc_test_dict.h"
 #include "FEX\LinearMapper.h"
-#include "VIS.h"
-
-namespace dgm = DirectGraphicalModels;
 
 void print_help(void)
 {
@@ -34,6 +30,10 @@ int main(int argc, char *argv[])
 	const int	sampleLen = nSequences * windowSize;
 	printf("Sample length = %d\n", sampleLen);
 	
+	// Loading the dictionary
+	CCSTestDict sparseDictionary;
+	sparseDictionary.load(inDicFile);
+	
 	// Reading the content of the file to vData
 	FILE * pFile = fopen(inDatFile.c_str(), "r");
 	std::vector<float> vData;
@@ -45,23 +45,19 @@ int main(int argc, char *argv[])
 	DGM_ASSERT(vData.size() % nSequences == 0);
 	size_t sequenceLen = vData.size() / nSequences;
 
-	Mat	sample(1, sampleLen, CV_16UC1);
-	Mat samplef(1, sampleLen, CV_32FC1);
 	for (size_t i = 0; i < sequenceLen - windowSize; i += windowStep) {		// i = start of the window
+		Mat	sample(1, sampleLen, CV_16UC1);
 		for (size_t s = 0; s < nSequences; s++) 							// sequences
 			for (size_t j = 0; j < windowSize; j++) {
 				float el = vData[i + s * sequenceLen + j];
 				sample.at<word>(0, s * windowSize + j) = dgm::fex::linear_mapper<word>(el, rangeMin, rangeMax);
 			}
-		sample.convertTo(samplef, CV_32FC1, 1.0 / 65535);
-
-
+		sparseDictionary.get(sample);
 	} // i
 	
 	printf("data len = %ld\n", vData.size());
 
-	dgm::fex::CSparseDictionary sparseDictionary;
-	sparseDictionary.load(inDicFile);
+
 
 
 
