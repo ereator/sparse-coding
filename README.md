@@ -7,6 +7,7 @@ The values in the training dataset are integers and distributed in the range of 
 sc_train.exe D:\Data\Raw_6_sensors 6 16 1 512 2000 1000 0.01f D:\dictionary.dic
 
 ## Testing
+The resulting features are represented by floating point values in range [-1; 1].
 
 ### Example command
 sc_test.exe D:\dictionary.dic D:\Data\Raw_6_sensors_examples\S1-ADL1-1\ex2_6-69.txt 6 16 1 D:\ex2_6-69.dat
