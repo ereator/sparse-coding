@@ -4,25 +4,28 @@
 void print_help(void)
 {
 	printf("Usage: \"sc_test.exe\" \n");	// 0
-	printf("\t input_dict.dic \n");			// 1
-	printf("\t input_file.txt \n");			// 2
-	printf("\t output_file.txt \n");		// 3
+	printf("\t <input dictionary> \n");		// 1
+	printf("\t <input file> \n");			// 2
+	printf("\t <number of sequences> \n");	// 3
+	printf("\t <window width> \n");			// 4
+	printf("\t <window step> \n");			// 5
+	printf("\t <output file> \n");			// 6
 }
 
 int main(int argc, char *argv[])
 {
-	if (argc != 1) {
+	if (argc != 7) {
 		print_help();
 		return 0;
 	}
 
 	// Parsing Parameters
-	std::string inDicFile	= "D:\\Projects\\sparse-coding\\dictionaries\\dictionary_6x16.dic";
-	std::string inDatFile	= "D:\\Data\\Raw_6_sensors_examples\\S1-ADL1-1\\ex2_6-69.txt";
-	size_t		nSequences  = 6;
-	size_t		windowSize  = 16;
-	word		windowStep  = 1;
-	std::string outFeatures = "D:\\ex2_6-69.dat";
+	std::string inDicFile	= argv[1];			// "D:\\Projects\\sparse-coding\\dictionaries\\dictionary_6x16.dic"
+	std::string inDatFile	= argv[2];			// "D:\\Data\\Raw_6_sensors_examples\\S1-ADL1-1\\ex2_6-69.txt"
+	size_t		nSequences	= atoi(argv[3]);	// 6
+	size_t		windowSize	= atoi(argv[4]);	// 16
+	word		windowStep	= atoi(argv[5]);	// 1
+	std::string outFeatures	= argv[6];			// "D:\\ex2_6-69.dat"
 
 	// Additional constants
 	const float	rangeMin = -16384;
