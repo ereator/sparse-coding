@@ -82,12 +82,9 @@ int main(int argc, char *argv[])
 		// Reading the content of the file to vData
 		FILE * pFile = fopen(file.c_str(), "r");
 		std::vector<float> vData;
-		while (!feof(pFile)) {
-			double	el;
-			fscanf(pFile, "%le", &el);
+		double	el;
+		while (fscanf(pFile, "%le", &el) != EOF) 
 			vData.push_back(static_cast<float>(el));
-		
-		}
 		fclose(pFile);
 
 		DGM_ASSERT(vData.size() % nSequences == 0);
