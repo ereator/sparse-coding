@@ -53,8 +53,8 @@ int main(int argc, char *argv[])
 
 	// Parsing Parameters
 	std::string		srcFolder	= argv[1];
-	size_t			nSequences	= atoi(argv[2]);			// 6
-	size_t			windowSize  = atoi(argv[3]);			// 16
+	int				nSequences	= atoi(argv[2]);			// 6
+	int				windowSize  = atoi(argv[3]);			// 16
 	word			windowStep	= atoi(argv[4]);			// 1
 	word			nWords		= atoi(argv[5]);			// 512
 	dword			batch		= atoi(argv[6]); 			// 2000
@@ -102,8 +102,8 @@ int main(int argc, char *argv[])
 		} 
 		
 		for (size_t i = 0; i < sequenceLen - windowSize; i += windowStep) {		// i = start of the window
-			for (size_t s = 0; s < nSequences; s++) 							// sequences
-				for (size_t j = 0; j < windowSize; j++) {
+			for (int s = 0; s < nSequences; s++) 							// sequences
+				for (int j = 0; j < windowSize; j++) {
 					float el = vData[i + s * sequenceLen + j];
 					sample.at<word>(0, s * windowSize + j) = dgm::fex::linear_mapper<word>(el, rangeMin, rangeMax);
 				}
@@ -111,8 +111,8 @@ int main(int argc, char *argv[])
 		} // i
 	}
 	if (rangeShow) {
-		printf("\nThe value ranges for %ld sequences:\n", nSequences);
-		for (size_t s = 0; s < nSequences; s++)
+		printf("\nThe value ranges for %d sequences:\n", nSequences);
+		for (int s = 0; s < nSequences; s++)
 			printf("seq[%d] \\in [%.2f; %.2f]\n", s, min_el[s], max_el[s]);
 	}
 	

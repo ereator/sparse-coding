@@ -22,8 +22,8 @@ int main(int argc, char *argv[])
 	// Parsing Parameters
 	std::string inDicFile	= argv[1];			// "D:\\Projects\\sparse-coding\\dictionaries\\dictionary_6x16.dic"
 	std::string inDatFile	= argv[2];			// "D:\\Data\\Raw_6_sensors_examples\\S1-ADL1-1\\ex2_6-69.txt"
-	size_t		nSequences	= atoi(argv[3]);	// 6
-	size_t		windowSize	= atoi(argv[4]);	// 16
+	int			nSequences	= atoi(argv[3]);	// 6
+	int			windowSize	= atoi(argv[4]);	// 16
 	word		windowStep	= atoi(argv[5]);	// 1
 	std::string outFeatures	= argv[6];			// "D:\\ex2_6-69.dat"
 
@@ -47,14 +47,14 @@ int main(int argc, char *argv[])
 
 	DGM_ASSERT(vData.size() % nSequences == 0);
 	size_t sequenceLen = vData.size() / nSequences;
-	printf("data len = %ld\n", vData.size());
+	printf("data len = %lld\n", vData.size());
 	
 	// Calculate and save the feature
 	pFile = fopen(outFeatures.c_str(), "w");
 	for (size_t i = 0; i < sequenceLen - windowSize; i += windowStep) {		// i = start of the window
 		Mat	sample(1, sampleLen, CV_16UC1);
-		for (size_t s = 0; s < nSequences; s++) 							// sequences
-			for (size_t j = 0; j < windowSize; j++) {
+		for (int s = 0; s < nSequences; s++) 							// sequences
+			for (int j = 0; j < windowSize; j++) {
 				float el = vData[i + s * sequenceLen + j];
 				sample.at<word>(0, s * windowSize + j) = dgm::fex::linear_mapper<word>(el, rangeMin, rangeMax);
 			}
