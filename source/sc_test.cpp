@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
 
 	DGM_ASSERT(vData.size() % nSequences == 0);
 	size_t sequenceLen = vData.size() / nSequences;
-	printf("data len = %lld\n", vData.size());
+	printf("data length = %zu\n", vData.size());
 	
 	// Calculate and save the feature
 	pFile = fopen(outFeatures.c_str(), "w");

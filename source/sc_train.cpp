@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
 		size_t sequenceLen = vData.size() / nSequences;
 		
 		if (rangeShow) {	// Check min and max values
-			for (size_t s = 0; s < nSequences; s++) {		// sequences
+			for (int s = 0; s < nSequences; s++) {		// sequences
 				size_t offset = s * sequenceLen;
 				for (size_t i = 0; i < sequenceLen; i++) {	// elements
 					float el = vData[offset + i];
